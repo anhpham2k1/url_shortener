@@ -1,0 +1,261 @@
+{
+  "info": {
+    "name": "URL Shortener API",
+    "description": "Production-grade URL Shortener with JWT Auth, Link CRUD, Redirect, Analytics, Quota & Rate Limiting",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/auth/register",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\",\n  \"fullName\": \"Anh Pham\"\n}"
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.token) {",
+                  "    pm.collectionVariables.set('token', json.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/auth/login",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/users/me"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/users/me",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Anh Pham Updated\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/users/me/password",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Password123!\",\n  \"newPassword\": \"NewPassword456!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/users/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Links",
+      "item": [
+        {
+          "name": "Create Short Link",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/links",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"originalUrl\": \"https://google.com\",\n  \"title\": \"Google Homepage\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Short Link (Custom Alias)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/links",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"originalUrl\": \"https://github.com\",\n  \"customAlias\": \"my-github\",\n  \"title\": \"My GitHub\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Short Link (With Expiry)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/links",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"originalUrl\": \"https://example.com/promo\",\n  \"title\": \"Limited Time Promo\",\n  \"expiresAt\": \"2026-12-31T23:59:59Z\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get My Links",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/links"
+          }
+        },
+        {
+          "name": "Get Link By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/links/1"
+          }
+        },
+        {
+          "name": "Update Link",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/links/1",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"status\": \"DISABLED\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Link",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/links/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Redirect",
+      "item": [
+        {
+          "name": "Redirect Short Link",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/r/my-github",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Link Analytics",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/links/my-github/analytics"
+          }
+        }
+      ]
+    }
+  ]
+}

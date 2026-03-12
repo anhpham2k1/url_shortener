@@ -1,0 +1,39 @@
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Frontend Runtime
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.env
+Frontend/.env.local
+Frontend/.env.*.local
+Frontend/npm-debug.log*
+Frontend/yarn-debug.log*
+Frontend/yarn-error.log*
+Frontend/pnpm-debug.log*
+
+# Backend Runtime
+Backend/target/
+Backend/build/
+Backend/bin/
+Backend/.gradle/
+Backend/.mvn/wrapper/maven-wrapper.jar
+Backend/out/
+
+# Logs
+logs/
+*.log
+
+# Operating System Files
+Thumbs.db
+ehthumbs.db
+
+# Secrets
+*.pem
+*.key
+.env
